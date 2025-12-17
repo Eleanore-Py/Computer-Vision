@@ -1,168 +1,152 @@
-## 📐 Mathematical Explanation of Eye Aspect Ratio (EAR)
+# 👁️ Eye Blink & Fatigue Detection
 
-### What is EAR?
+## 📌 Deskripsi
 
-Eye Aspect Ratio (EAR) is a geometric-based metric used to measure eye openness by analyzing the relative distances between specific eye landmarks. It is widely used in eye blink detection systems because it is **simple, efficient, and invariant to scale**.
+Proyek ini adalah sistem **pendeteksi kedipan mata (Eye Blink Detection)** dan **indikasi kelelahan (Fatigue Detection)** secara **real-time** menggunakan **Python**, **MediaPipe Face Mesh (468 landmark)**, dan pendekatan matematis **Eye Aspect Ratio (EAR)**.
 
-EAR works under a simple observation:
-
-* When the eye is **open**, the vertical distances between eyelids are relatively large.
-* When the eye is **closed**, these vertical distances shrink toward zero, while the horizontal eye width remains almost constant.
+Aplikasi ini memanfaatkan kamera untuk memonitor kondisi mata pengguna dan menampilkan informasi seperti jumlah kedipan, nilai EAR, blink rate, serta peringatan kelelahan.
 
 ---
 
-### Eye Landmark Representation
+## 🚀 Fitur Utama
 
-Each eye is represented by **6 landmark points**:
-
-```
-P1 ---- P4
- |      |
-P2      P6
- |      |
-P3 ---- P5
-```
-
-Where:
-
-* **P1 & P4** → horizontal eye corners
-* **P2, P3, P5, P6** → upper and lower eyelid points
+* ✔ **Eye Blink Detection (Real-time)**
+* ✔ **Blink Rate (kedipan per menit)**
+* ✔ **EAR Graph (EAR vs waktu)**
+* ✔ **Adaptive EAR Threshold**
+* ✔ **Fatigue & Drowsiness Detection**
+* ✔ MediaPipe 468 Facial Landmarks
+* ✔ Visualisasi landmark mata
 
 ---
 
-### EAR Formula
+## 🧠 Konsep Eye Aspect Ratio (EAR)
 
-The Eye Aspect Ratio is defined as:
+EAR adalah rasio geometris yang menggambarkan tingkat keterbukaan mata berdasarkan jarak antar landmark mata.
 
-[
-EAR = \frac{||P2 - P6|| + ||P3 - P5||}{2 \times ||P1 - P4||}
-]
+Rumus:
 
-Where:
+EAR = (||p2 − p6|| + ||p3 − p5||) / (2 × ||p1 − p4||)
 
-* ( ||P_i - P_j|| ) is the **Euclidean distance** between two landmark points
+Interpretasi:
 
----
+* EAR tinggi → mata terbuka
+* EAR rendah → mata tertutup (kedipan)
 
-### Step-by-Step Breakdown
-
-1. **Vertical distances (eye height):**
-
-   * ( A = ||P2 - P6|| )
-   * ( B = ||P3 - P5|| )
-
-2. **Horizontal distance (eye width):**
-
-   * ( C = ||P1 - P4|| )
-
-3. **Compute EAR:**
-
-   * ( EAR = (A + B) / (2C) )
+Jika EAR berada di bawah threshold selama beberapa frame berturut-turut, sistem menganggap terjadi satu kedipan.
 
 ---
 
-### Blink Detection Logic
+## 📊 Blink Rate
 
-* EAR value remains **almost constant** when eyes are open
-* EAR value **drops sharply** when eyes close
+Blink rate dihitung berdasarkan jumlah kedipan dalam interval waktu tertentu (kedipan/menit).
 
-A blink is detected when:
+Indikasi:
 
-* EAR falls **below a predefined threshold** for a certain number of consecutive frames
-
-Typical values:
-
-* EAR (open eye): `~0.25 – 0.30`
-* EAR (closed eye): `< 0.20`
+* 10–20 blink/menit → normal
+* > 25 blink/menit → indikasi kelelahan
 
 ---
 
-### Why EAR Works Well
+## ⚙ Adaptive Threshold
 
-✔ Scale-invariant (works regardless of face distance to camera)
-✔ Computationally lightweight (real-time capable)
-✔ Robust for both classical CV and ML-based landmark detectors
+Alih-alih menggunakan threshold statis, sistem dapat menyesuaikan nilai threshold EAR berdasarkan:
 
----
+* EAR rata-rata pengguna
+* Kondisi pencahayaan
+* Variasi bentuk mata
 
-### Limitations
-
-* Sensitive to inaccurate landmark detection
-* Threshold may vary across individuals
-* Extreme head rotations may affect accuracy
+Hal ini membuat sistem lebih robust dan personal.
 
 ---
 
-### Summary
+## 😴 Fatigue Detection
 
-The Eye Aspect Ratio transforms facial landmark geometry into a simple numerical signal that reliably represents eye state (open or closed). By combining EAR with temporal logic, real-time and accurate eye blink detection can be achieved.
+Fatigue dideteksi menggunakan kombinasi:
 
-This makes EAR a practical bridge between **machine learning-based landmark detection** and **rule-based computer vision logic**.
+* Blink rate tinggi
+* Durasi mata tertutup yang lama
+* EAR rendah secara konsisten
 
----
+Contoh kondisi:
 
-## ⚡ TL;DR — Eye Aspect Ratio (EAR)
-
-EAR is a geometric metric that measures eye openness using facial landmarks. It compares vertical eyelid distances to horizontal eye width. When the eye closes, EAR drops sharply, making it effective for real-time blink detection using a simple threshold and temporal logic.
-
----
-
-## 🎓 Academic Explanation (Journal-Style)
-
-Eye blink detection in this project is based on the Eye Aspect Ratio (EAR), a scale-invariant geometric feature derived from facial landmark coordinates. Let an eye be represented by six ordered landmark points (P_1, P_2, ..., P_6). Two vertical distances (d_v) are computed between the upper and lower eyelids, while one horizontal distance (d_h) is computed between the eye corners. The EAR is defined as:
-
-[
-EAR = \frac{||P_2 - P_6|| + ||P_3 - P_5||}{2 ||P_1 - P_4||}
-]
-
-Because (d_h) remains relatively constant during blinking and (d_v) decreases significantly when the eye closes, EAR provides a robust indicator of eye state. A blink event is detected when EAR falls below a predefined threshold (T) for (N) consecutive frames, ensuring temporal stability and reducing false positives caused by noise or partial occlusions.
+* Mata tertutup > 1.5 detik → **Drowsy Warning**
+* Blink rate tinggi + EAR rendah → **Fatigue Detected**
 
 ---
 
-## 📊 EAR vs Time (Blink Visualization)
+## 📈 EAR vs Waktu
 
-During runtime, EAR values can be plotted against time (or frame index) to visualize blinking behavior:
+Nilai EAR direkam setiap frame dan dapat divisualisasikan sebagai grafik **EAR terhadap waktu**.
 
-* **Open eye:** EAR remains stable
-* **Blink:** EAR forms a sharp downward spike
+Manfaat:
 
-This temporal signal can be used for:
+* Analisis pola kedipan
+* Identifikasi micro-sleep
+* Data untuk pengembangan machine learning
 
-* Blink frequency estimation
-* Fatigue detection
-* Time-series modeling (e.g., LSTM-based classification)
+---
 
-Conceptually:
+## 🛠️ Teknologi yang Digunakan
 
-```
-EAR
-│      ┌───────┐      ┌───────┐
-│      │       │      │       │
-│──────┘       └──────┘       └───→ time
-│        ↓ blink        ↓ blink
+* Python
+* OpenCV
+* MediaPipe Face Mesh
+* NumPy
+* SciPy
+
+---
+
+## ▶ Cara Menjalankan
+
+1. Install dependency:
+
+```bash
+pip install opencv-python mediapipe numpy scipy
 ```
 
----
+2. Jalankan program:
 
-## 🧠 EAR with MediaPipe (468 Landmarks)
+```bash
+python eyeblink.py
+```
 
-In this project, facial landmarks are obtained using **MediaPipe Face Mesh**, which predicts **468 dense facial landmarks** using a deep learning model. Instead of the traditional dlib 68-point scheme, a subset of landmarks corresponding to the eye region is selected.
-
-Example eye landmark indices (MediaPipe):
-
-* **Left eye:** 33, 160, 158, 133, 153, 144
-* **Right eye:** 362, 385, 387, 263, 373, 380
-
-These landmarks are mapped to the EAR formula identically, preserving the mathematical foundation while benefiting from:
-
-* Higher landmark precision
-* Better robustness to head pose variations
-* No requirement for external model files
-
-Thus, EAR serves as a bridge between **deep learning-based facial landmark detection** and **classical geometric computer vision techniques**.
+3. Tekan **q** untuk keluar.
 
 ---
 
-## 📌 Final Note
+## ❓ Apakah Ini Machine Learning?
 
-EAR-based blink detection is not a trained classifier but a hybrid approach that combines **pre-trained machine learning models** (for landmark detection) with **rule-based geometric reasoning**. This makes it lightweight, interpretable, and well-suited for real-time applications.
+✔ **Menggunakan model ML pre-trained** dari MediaPipe untuk facial landmark detection.
+
+❌ Tidak melakukan training model baru.
+
+Logika blink, EAR, dan fatigue menggunakan **pendekatan matematis dan rule-based**.
+
+---
+
+## 🎯 Use Case
+
+* Driver fatigue monitoring
+* Human–Computer Interaction (HCI)
+* Proyek computer vision
+* Sistem monitoring kesehatan ringan
+* Research & edukasi
+
+---
+
+## 🔮 Pengembangan Selanjutnya
+
+* Grafik EAR real-time
+* Alarm suara saat drowsy
+* Dashboard GUI (Streamlit / Tkinter)
+* Model ML/LSTM untuk klasifikasi fatigue
+* Deployment ke Raspberry Pi / edge device
+
+---
+
+## 👨‍💻 Author
+
+**Dhava Wirayuda**
+Teknik Elektro / Telekomunikasi
+Fokus: Computer Vision, IoT, AI
