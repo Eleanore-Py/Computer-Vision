@@ -98,3 +98,71 @@ Typical values:
 The Eye Aspect Ratio transforms facial landmark geometry into a simple numerical signal that reliably represents eye state (open or closed). By combining EAR with temporal logic, real-time and accurate eye blink detection can be achieved.
 
 This makes EAR a practical bridge between **machine learning-based landmark detection** and **rule-based computer vision logic**.
+
+---
+
+## ⚡ TL;DR — Eye Aspect Ratio (EAR)
+
+EAR is a geometric metric that measures eye openness using facial landmarks. It compares vertical eyelid distances to horizontal eye width. When the eye closes, EAR drops sharply, making it effective for real-time blink detection using a simple threshold and temporal logic.
+
+---
+
+## 🎓 Academic Explanation (Journal-Style)
+
+Eye blink detection in this project is based on the Eye Aspect Ratio (EAR), a scale-invariant geometric feature derived from facial landmark coordinates. Let an eye be represented by six ordered landmark points (P_1, P_2, ..., P_6). Two vertical distances (d_v) are computed between the upper and lower eyelids, while one horizontal distance (d_h) is computed between the eye corners. The EAR is defined as:
+
+[
+EAR = \frac{||P_2 - P_6|| + ||P_3 - P_5||}{2 ||P_1 - P_4||}
+]
+
+Because (d_h) remains relatively constant during blinking and (d_v) decreases significantly when the eye closes, EAR provides a robust indicator of eye state. A blink event is detected when EAR falls below a predefined threshold (T) for (N) consecutive frames, ensuring temporal stability and reducing false positives caused by noise or partial occlusions.
+
+---
+
+## 📊 EAR vs Time (Blink Visualization)
+
+During runtime, EAR values can be plotted against time (or frame index) to visualize blinking behavior:
+
+* **Open eye:** EAR remains stable
+* **Blink:** EAR forms a sharp downward spike
+
+This temporal signal can be used for:
+
+* Blink frequency estimation
+* Fatigue detection
+* Time-series modeling (e.g., LSTM-based classification)
+
+Conceptually:
+
+```
+EAR
+│      ┌───────┐      ┌───────┐
+│      │       │      │       │
+│──────┘       └──────┘       └───→ time
+│        ↓ blink        ↓ blink
+```
+
+---
+
+## 🧠 EAR with MediaPipe (468 Landmarks)
+
+In this project, facial landmarks are obtained using **MediaPipe Face Mesh**, which predicts **468 dense facial landmarks** using a deep learning model. Instead of the traditional dlib 68-point scheme, a subset of landmarks corresponding to the eye region is selected.
+
+Example eye landmark indices (MediaPipe):
+
+* **Left eye:** 33, 160, 158, 133, 153, 144
+* **Right eye:** 362, 385, 387, 263, 373, 380
+
+These landmarks are mapped to the EAR formula identically, preserving the mathematical foundation while benefiting from:
+
+* Higher landmark precision
+* Better robustness to head pose variations
+* No requirement for external model files
+
+Thus, EAR serves as a bridge between **deep learning-based facial landmark detection** and **classical geometric computer vision techniques**.
+
+---
+
+## 📌 Final Note
+
+EAR-based blink detection is not a trained classifier but a hybrid approach that combines **pre-trained machine learning models** (for landmark detection) with **rule-based geometric reasoning**. This makes it lightweight, interpretable, and well-suited for real-time applications.
