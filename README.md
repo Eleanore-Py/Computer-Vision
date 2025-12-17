@@ -34,7 +34,7 @@ Aplikasi ini memanfaatkan kamera untuk memonitor kondisi mata pengguna dan menam
 
 ### Demo Aplikasi
 
-![Demo](
+![Demo](assets/Concept.png)
 
 ## Konsep Eye Aspect Ratio (EAR)
 
