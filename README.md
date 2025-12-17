@@ -32,7 +32,7 @@ Aplikasi ini memanfaatkan kamera untuk memonitor kondisi mata pengguna dan menam
 
 ![EAR Graph](assets/ear_graph_example.png)
 
-### Demo Aplikasi
+### Mekanisme pendeteksi
 
 ![Demo](assets/Concept.png)
 
