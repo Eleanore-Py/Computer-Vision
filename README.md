@@ -205,5 +205,5 @@ Logika blink, EAR, dan fatigue menggunakan **pendekatan matematis dan rule-based
 ## 👨‍💻 Author
 
 **Dhava Wirayuda**
-Teknik Elektro / Telekomunikasi
-Fokus: Computer Vision, IoT, AI
+Electrical Engineering / Telecomunication
+Focus on: Computer Vision, IoT, AI, Web3
