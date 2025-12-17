@@ -1,6 +1,6 @@
-# 👁️ Eye Blink & Fatigue Detection
+# Eye Blink & Fatigue Detection
 
-## 📌 Deskripsi
+## Deskripsi
 
 Proyek ini adalah sistem **pendeteksi kedipan mata (Eye Blink Detection)** dan **indikasi kelelahan (Fatigue Detection)** secara **real-time** menggunakan **Python**, **MediaPipe Face Mesh (468 landmark)**, dan pendekatan matematis **Eye Aspect Ratio (EAR)**.
 
@@ -8,7 +8,7 @@ Aplikasi ini memanfaatkan kamera untuk memonitor kondisi mata pengguna dan menam
 
 ---
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 * ✔ **Eye Blink Detection (Real-time)**
 * ✔ **Blink Rate (kedipan per menit)**
@@ -20,7 +20,7 @@ Aplikasi ini memanfaatkan kamera untuk memonitor kondisi mata pengguna dan menam
 
 ---
 
-## 🧠 Konsep Eye Aspect Ratio (EAR)
+## Konsep Eye Aspect Ratio (EAR)
 
 EAR adalah rasio geometris yang menggambarkan tingkat keterbukaan mata berdasarkan jarak antar landmark mata.
 
@@ -37,7 +37,7 @@ Jika EAR berada di bawah threshold selama beberapa frame berturut-turut, sistem 
 
 ---
 
-## 📊 Blink Rate
+## Blink Rate
 
 Blink rate dihitung berdasarkan jumlah kedipan dalam interval waktu tertentu (kedipan/menit).
 
@@ -48,7 +48,7 @@ Indikasi:
 
 ---
 
-## ⚙ Adaptive Threshold
+## Adaptive Threshold
 
 Alih-alih menggunakan threshold statis, sistem dapat menyesuaikan nilai threshold EAR berdasarkan:
 
@@ -60,7 +60,7 @@ Hal ini membuat sistem lebih robust dan personal.
 
 ---
 
-## 😴 Fatigue Detection
+## Fatigue Detection
 
 Fatigue dideteksi menggunakan kombinasi:
 
@@ -75,9 +75,23 @@ Contoh kondisi:
 
 ---
 
-## 📈 EAR vs Waktu
+## EAR vs Waktu
 
 Nilai EAR direkam setiap frame dan dapat divisualisasikan sebagai grafik **EAR terhadap waktu**.
+
+### Contoh Grafik EAR vs Waktu
+
+(Ilustrasi)
+
+```
+EAR
+│        ┌───┐        ┌───┐
+│        │   │        │   │
+│   ┌────┘   └────┐   └───┘
+│───┘              └─────────── waktu
+```
+
+Penurunan EAR yang tajam menunjukkan **kedipan mata**. Jika EAR berada di bawah threshold dalam durasi lama, sistem mengindikasikan **drowsiness**.
 
 Manfaat:
 
@@ -87,7 +101,34 @@ Manfaat:
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## Diagram Sistem
+
+### Alur Kerja Sistem
+
+```
+Camera Input
+     │
+     ▼
+Face Detection (MediaPipe)
+     │
+     ▼
+Eye Landmark Extraction (468 points)
+     │
+     ▼
+EAR Calculation
+     │
+     ▼
+Blink Detection & Fatigue Analysis
+     │
+     ▼
+Visual Output + Logging
+```
+
+Diagram ini menunjukkan bagaimana data video diproses secara bertahap hingga menghasilkan deteksi kedipan dan indikasi kelelahan.
+
+---
+
+## Teknologi yang Digunakan
 
 * Python
 * OpenCV
@@ -115,12 +156,10 @@ python eyeblink.py
 
 ---
 
-## ❓ Apakah Ini Machine Learning?
-
+## ❓ Apakah Ini Machine Learning? Ya!
 ✔ **Menggunakan model ML pre-trained** dari MediaPipe untuk facial landmark detection.
 
-❌ Tidak melakukan training model baru.
-
+❌ Apakah melakukan training model baru? Tidak!
 Logika blink, EAR, dan fatigue menggunakan **pendekatan matematis dan rule-based**.
 
 ---
@@ -148,5 +187,5 @@ Logika blink, EAR, dan fatigue menggunakan **pendekatan matematis dan rule-based
 ## 👨‍💻 Author
 
 **Dhava Wirayuda**
-Teknik Elektro / Telekomunikasi
-Fokus: Computer Vision, IoT, AI
+Electrical Engineeering / Telecomunication
+Focus on: Computer Vision, IoT, AI, Web3
